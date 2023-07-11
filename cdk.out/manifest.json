@@ -1,0 +1,64 @@
+{
+  "version": "32.0.0",
+  "artifacts": {
+    "JestonLewisCreativeFrontEndStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "JestonLewisCreativeFrontEndStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "JestonLewisCreativeFrontEndStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://706391136734/us-west-2",
+      "properties": {
+        "templateFile": "JestonLewisCreativeFrontEndStack.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-deploy-role-706391136734-us-west-2",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-cfn-exec-role-706391136734-us-west-2",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-706391136734-us-west-2/38d326498e4dfaa35752883586fc8e9e2e1c68230c8eefe72d4871565991814b.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "JestonLewisCreativeFrontEndStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-lookup-role-706391136734-us-west-2",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "JestonLewisCreativeFrontEndStack.assets"
+      ],
+      "metadata": {
+        "/JestonLewisCreativeFrontEndStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "JestonLewisCreativeFrontEndStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}
