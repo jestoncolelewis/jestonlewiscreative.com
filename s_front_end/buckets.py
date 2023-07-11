@@ -8,7 +8,7 @@ from aws_cdk import (
     RemovalPolicy
 )
 
-name = 'mybreadventure.blog'
+name = 'jestonlewiscreative.com'
 
 class Buckets(Construct):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
@@ -35,7 +35,7 @@ class Buckets(Construct):
             self, 'MainBucket',
             public_read_access=True,
             website_index_document='index.html',
-            website_error_document='404.html',
+            website_error_document='404error.html',
             bucket_name=name,
             block_public_access=s3.BlockPublicAccess(block_public_acls=False),
             removal_policy=RemovalPolicy.DESTROY

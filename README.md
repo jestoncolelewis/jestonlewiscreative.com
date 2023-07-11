@@ -1,4 +1,4 @@
-# Static Front End Deployment
+# Jeston Lewis Creative Website Deployment
 
 ## Stack
 - Buckets for storage

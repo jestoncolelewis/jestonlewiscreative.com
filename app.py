@@ -7,6 +7,6 @@ from s_front_end.s_front_end_stack import SFrontEndStack
 
 
 app = cdk.App()
-SFrontEndStack(app, "SFrontEndStack", env=...)
+SFrontEndStack(app, "JestonLewisCreativeFrontEndStack", env=...)
 
 app.synth()
