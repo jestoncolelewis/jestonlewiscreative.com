@@ -1,0 +1,51 @@
+digraph G {
+  # Arrows represent an "unlocks" relationship (opposite of dependency). So chosen
+  # because the layout looks more natural that way.
+  # To represent subgraph dependencies, subgraphs are represented by BEGIN/END nodes.
+  # To render: `dot -Tsvg JestonLewisCreativeFrontEndStackPipelineC2681E6E.dot > graph.svg`, open in a browser.
+  node [shape="box"];
+"BEGIN Build" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Build" [shape="cds", style="filled", fillcolor="#b7deff"];
+"Build.Synth";
+"Source.jestoncolelewis/jestonlewiscreative.com" -> "Build.Synth";
+"BEGIN Build" -> "Build.Synth";
+"Build.Synth" -> "END Build";
+"BEGIN UpdatePipeline" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END UpdatePipeline" [shape="cds", style="filled", fillcolor="#b7deff"];
+"UpdatePipeline.SelfMutate";
+"Build.Synth" -> "UpdatePipeline.SelfMutate";
+"BEGIN UpdatePipeline" -> "UpdatePipeline.SelfMutate";
+"UpdatePipeline.SelfMutate" -> "END UpdatePipeline";
+"BEGIN Dev" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Dev" [shape="cds", style="filled", fillcolor="#b7deff"];
+"UpdatePipeline.SelfMutate" -> "BEGIN Dev";
+"BEGIN Dev.WebService" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Dev.WebService" [shape="cds", style="filled", fillcolor="#b7deff"];
+"Dev.WebService.Deploy";
+"Dev.WebService.Prepare" -> "Dev.WebService.Deploy";
+"Dev.WebService.Prepare";
+"Build.Synth" -> "Dev.WebService.Prepare";
+"BEGIN Dev.WebService" -> "Dev.WebService.Prepare";
+"Dev.WebService.Deploy" -> "END Dev.WebService";
+"BEGIN Dev" -> "BEGIN Dev.WebService";
+"END Dev.WebService" -> "END Dev";
+"BEGIN Prod" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Prod" [shape="cds", style="filled", fillcolor="#b7deff"];
+"UpdatePipeline.SelfMutate" -> "BEGIN Prod";
+"END Dev" -> "BEGIN Prod";
+"BEGIN Prod.WebService" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Prod.WebService" [shape="cds", style="filled", fillcolor="#b7deff"];
+"Prod.WebService.Deploy";
+"Prod.WebService.Prepare" -> "Prod.WebService.Deploy";
+"Prod.WebService.Prepare";
+"Build.Synth" -> "Prod.WebService.Prepare";
+"BEGIN Prod.WebService" -> "Prod.WebService.Prepare";
+"Prod.WebService.Deploy" -> "END Prod.WebService";
+"BEGIN Prod" -> "BEGIN Prod.WebService";
+"END Prod.WebService" -> "END Prod";
+"BEGIN Source" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Source" [shape="cds", style="filled", fillcolor="#b7deff"];
+"Source.jestoncolelewis/jestonlewiscreative.com";
+"BEGIN Source" -> "Source.jestoncolelewis/jestonlewiscreative.com";
+"Source.jestoncolelewis/jestonlewiscreative.com" -> "END Source";
+}

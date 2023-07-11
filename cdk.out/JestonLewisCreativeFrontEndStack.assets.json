@@ -1,7 +1,7 @@
 {
   "version": "32.0.0",
   "files": {
-    "38d326498e4dfaa35752883586fc8e9e2e1c68230c8eefe72d4871565991814b": {
+    "775ec735c41ed0da65618657a941304d71f623e55b69166dff04bdbfe7a12a77": {
       "source": {
         "path": "JestonLewisCreativeFrontEndStack.template.json",
         "packaging": "file"
@@ -9,7 +9,7 @@
       "destinations": {
         "706391136734-us-west-2": {
           "bucketName": "cdk-hnb659fds-assets-706391136734-us-west-2",
-          "objectKey": "38d326498e4dfaa35752883586fc8e9e2e1c68230c8eefe72d4871565991814b.json",
+          "objectKey": "775ec735c41ed0da65618657a941304d71f623e55b69166dff04bdbfe7a12a77.json",
           "region": "us-west-2",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-file-publishing-role-706391136734-us-west-2"
         }

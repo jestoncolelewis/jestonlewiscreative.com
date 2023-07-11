@@ -1,0 +1,161 @@
+{
+  "version": "32.0.0",
+  "artifacts": {
+    "JestonLewisCreativeFrontEndStackProdWebServiceA0672800.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "JestonLewisCreativeFrontEndStackProdWebServiceA0672800.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "JestonLewisCreativeFrontEndStackProdWebServiceA0672800": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "JestonLewisCreativeFrontEndStackProdWebServiceA0672800.template.json",
+        "validateOnSynth": true,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b204136cec4d5909ab51c30018cffdb106a7c7f189e183e80429c0730a7e4b70.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "JestonLewisCreativeFrontEndStackProdWebServiceA0672800.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "Prod-WebService"
+      },
+      "dependencies": [
+        "JestonLewisCreativeFrontEndStackProdWebServiceA0672800.assets"
+      ],
+      "metadata": {
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Buckets/MainBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketsMainBucketC3B8D52F"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Buckets/MainBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketsMainBucketPolicyBDC0C331"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Buckets/wwwBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketswwwBucket0EA6B914"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Buckets/MainDistro/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketsMainDistro69BFBB57"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Buckets/wwwDistro/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketswwwDistroCFAA9049"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Buckets/Certificate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BucketsCertificate603F95B0"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/HostedZone/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingHostedZoneBE37AE35"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingBucketsMainBucket04C1DE6F"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainBucket/Policy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingBucketsMainBucketPolicy82BF4899"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/wwwBucket/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingBucketswwwBucket911E0031"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainDistro/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingBucketsMainDistro1726F27C"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/wwwDistro/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingBucketswwwDistro110A0869"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/Certificate/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingBucketsCertificateD555BBB6"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/MainRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingMainRecordA388058E"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/wwwRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingwwwRecord7CD42007"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/AWSCloudFrontPartitionHostedZoneIdMap": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "JestonLewisCreativeFrontEndStack/Prod/WebService"
+    }
+  }
+}

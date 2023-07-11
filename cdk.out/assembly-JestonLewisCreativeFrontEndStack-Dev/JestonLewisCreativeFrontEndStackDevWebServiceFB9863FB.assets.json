@@ -1,0 +1,19 @@
+{
+  "version": "32.0.0",
+  "files": {
+    "4d4a5f657b98a18419ed2bf2a294a7b2c36c0784630460d55b0dd8c98e2c9a96": {
+      "source": {
+        "path": "JestonLewisCreativeFrontEndStackDevWebServiceFB9863FB.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "4d4a5f657b98a18419ed2bf2a294a7b2c36c0784630460d55b0dd8c98e2c9a96.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}

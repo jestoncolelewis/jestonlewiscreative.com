@@ -1,0 +1,713 @@
+{
+ "Resources": {
+  "BucketsMainBucketC3B8D52F": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "jestonlewiscreative.com",
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": false
+    },
+    "WebsiteConfiguration": {
+     "ErrorDocument": "404error.html",
+     "IndexDocument": "index.html"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Buckets/MainBucket/Resource"
+   }
+  },
+  "BucketsMainBucketPolicyBDC0C331": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "BucketsMainBucketC3B8D52F"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "BucketsMainBucketC3B8D52F",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": "arn:aws:s3:::jestonlewiscreative.com/*",
+       "Sid": "PublicReadGetObject"
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Buckets/MainBucket/Policy/Resource"
+   }
+  },
+  "BucketswwwBucket0EA6B914": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "www.jestonlewiscreative.com",
+    "WebsiteConfiguration": {
+     "RedirectAllRequestsTo": {
+      "HostName": "jestonlewiscreative.com"
+     }
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Buckets/wwwBucket/Resource"
+   }
+  },
+  "BucketsMainDistro69BFBB57": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "DefaultCacheBehavior": {
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "TargetOriginId": "JestonLewisCreativeFrontEndStackDevWebServiceBucketsMainDistroOrigin16A554649",
+      "ViewerProtocolPolicy": "allow-all"
+     },
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "CustomOriginConfig": {
+        "OriginProtocolPolicy": "http-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": {
+        "Fn::Select": [
+         2,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::GetAtt": [
+             "BucketsMainBucketC3B8D52F",
+             "WebsiteURL"
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "Id": "JestonLewisCreativeFrontEndStackDevWebServiceBucketsMainDistroOrigin16A554649"
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Buckets/MainDistro/Resource"
+   }
+  },
+  "BucketswwwDistroCFAA9049": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "DefaultCacheBehavior": {
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "TargetOriginId": "JestonLewisCreativeFrontEndStackDevWebServiceBucketswwwDistroOrigin186512B87",
+      "ViewerProtocolPolicy": "allow-all"
+     },
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "CustomOriginConfig": {
+        "OriginProtocolPolicy": "http-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": {
+        "Fn::Select": [
+         2,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::GetAtt": [
+             "BucketswwwBucket0EA6B914",
+             "WebsiteURL"
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "Id": "JestonLewisCreativeFrontEndStackDevWebServiceBucketswwwDistroOrigin186512B87"
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Buckets/wwwDistro/Resource"
+   }
+  },
+  "BucketsCertificate603F95B0": {
+   "Type": "AWS::CertificateManager::Certificate",
+   "Properties": {
+    "DomainName": "*.jestonlewiscreative.com",
+    "DomainValidationOptions": [
+     {
+      "DomainName": "*.jestonlewiscreative.com",
+      "ValidationDomain": "jestonlewiscreative.com"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "JestonLewisCreativeFrontEndStack/Dev/WebService/Buckets/Certificate"
+     }
+    ],
+    "ValidationMethod": "EMAIL"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Buckets/Certificate/Resource"
+   }
+  },
+  "HostingHostedZoneBE37AE35": {
+   "Type": "AWS::Route53::HostedZone",
+   "Properties": {
+    "Name": "jestonlewiscreative.com."
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/HostedZone/Resource"
+   }
+  },
+  "HostingBucketsMainBucket04C1DE6F": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "jestonlewiscreative.com",
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": false
+    },
+    "WebsiteConfiguration": {
+     "ErrorDocument": "404error.html",
+     "IndexDocument": "index.html"
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/Buckets/MainBucket/Resource"
+   }
+  },
+  "HostingBucketsMainBucketPolicy82BF4899": {
+   "Type": "AWS::S3::BucketPolicy",
+   "Properties": {
+    "Bucket": {
+     "Ref": "HostingBucketsMainBucket04C1DE6F"
+    },
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          {
+           "Fn::GetAtt": [
+            "HostingBucketsMainBucket04C1DE6F",
+            "Arn"
+           ]
+          },
+          "/*"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": "s3:GetObject",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "*"
+       },
+       "Resource": "arn:aws:s3:::jestonlewiscreative.com/*",
+       "Sid": "PublicReadGetObject"
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/Buckets/MainBucket/Policy/Resource"
+   }
+  },
+  "HostingBucketswwwBucket911E0031": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketName": "www.jestonlewiscreative.com",
+    "WebsiteConfiguration": {
+     "RedirectAllRequestsTo": {
+      "HostName": "jestonlewiscreative.com"
+     }
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/Buckets/wwwBucket/Resource"
+   }
+  },
+  "HostingBucketsMainDistro1726F27C": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "DefaultCacheBehavior": {
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "TargetOriginId": "JestonLewisCreativeFrontEndStackDevWebServiceHostingBucketsMainDistroOrigin1674F3B7C",
+      "ViewerProtocolPolicy": "allow-all"
+     },
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "CustomOriginConfig": {
+        "OriginProtocolPolicy": "http-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": {
+        "Fn::Select": [
+         2,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::GetAtt": [
+             "HostingBucketsMainBucket04C1DE6F",
+             "WebsiteURL"
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "Id": "JestonLewisCreativeFrontEndStackDevWebServiceHostingBucketsMainDistroOrigin1674F3B7C"
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/Buckets/MainDistro/Resource"
+   }
+  },
+  "HostingBucketswwwDistro110A0869": {
+   "Type": "AWS::CloudFront::Distribution",
+   "Properties": {
+    "DistributionConfig": {
+     "DefaultCacheBehavior": {
+      "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+      "Compress": true,
+      "TargetOriginId": "JestonLewisCreativeFrontEndStackDevWebServiceHostingBucketswwwDistroOrigin1995413AE",
+      "ViewerProtocolPolicy": "allow-all"
+     },
+     "Enabled": true,
+     "HttpVersion": "http2",
+     "IPV6Enabled": true,
+     "Origins": [
+      {
+       "CustomOriginConfig": {
+        "OriginProtocolPolicy": "http-only",
+        "OriginSSLProtocols": [
+         "TLSv1.2"
+        ]
+       },
+       "DomainName": {
+        "Fn::Select": [
+         2,
+         {
+          "Fn::Split": [
+           "/",
+           {
+            "Fn::GetAtt": [
+             "HostingBucketswwwBucket911E0031",
+             "WebsiteURL"
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       "Id": "JestonLewisCreativeFrontEndStackDevWebServiceHostingBucketswwwDistroOrigin1995413AE"
+      }
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/Buckets/wwwDistro/Resource"
+   }
+  },
+  "HostingBucketsCertificateD555BBB6": {
+   "Type": "AWS::CertificateManager::Certificate",
+   "Properties": {
+    "DomainName": "*.jestonlewiscreative.com",
+    "DomainValidationOptions": [
+     {
+      "DomainName": "*.jestonlewiscreative.com",
+      "ValidationDomain": "jestonlewiscreative.com"
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "Name",
+      "Value": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/Buckets/Certificate"
+     }
+    ],
+    "ValidationMethod": "EMAIL"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/Buckets/Certificate/Resource"
+   }
+  },
+  "HostingMainRecordA388058E": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "jestonlewiscreative.com.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "HostingBucketsMainDistro1726F27C",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": {
+     "Ref": "HostingHostedZoneBE37AE35"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/MainRecord/Resource"
+   }
+  },
+  "HostingwwwRecord7CD42007": {
+   "Type": "AWS::Route53::RecordSet",
+   "Properties": {
+    "Name": "www.jestonlewiscreative.com.",
+    "Type": "A",
+    "AliasTarget": {
+     "DNSName": {
+      "Fn::GetAtt": [
+       "HostingBucketswwwDistro110A0869",
+       "DomainName"
+      ]
+     },
+     "HostedZoneId": {
+      "Fn::FindInMap": [
+       "AWSCloudFrontPartitionHostedZoneIdMap",
+       {
+        "Ref": "AWS::Partition"
+       },
+       "zoneId"
+      ]
+     }
+    },
+    "HostedZoneId": {
+     "Ref": "HostingHostedZoneBE37AE35"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/Hosting/wwwRecord/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02OvQ7CMAyEn4W9NYiKvxUYWJAQbCwoJCmYFhsljhCK+u60BEGn83c+yzeG+QxGA/X0uTZVXuMZ4kGUrrLWOkVfQFwGXVnJViV9pyQ7rlG//nbiJtM1B1M6JoG4Ri8Oz0GQqUv2uU1aJ1iiVmLvitTFOoirv9cd9LDJHAexk7bRhr1Yc2T6ZHq0t5qdOaS2P2iaDrfq8UC6pI3n4HT6wGQw9dm95Mo0LGAB08HNI+YukODdwj7pG/iojQstAQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "JestonLewisCreativeFrontEndStack/Dev/WebService/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Mappings": {
+  "AWSCloudFrontPartitionHostedZoneIdMap": {
+   "aws": {
+    "zoneId": "Z2FDTNDATAQYW2"
+   },
+   "aws-cn": {
+    "zoneId": "Z3RFFRIM2A3IF5"
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

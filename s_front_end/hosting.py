@@ -3,7 +3,7 @@ from aws_cdk import (
     aws_route53 as r53,
     aws_route53_targets as targets
 )
-from .buckets import Buckets, name
+from s_front_end.buckets import Buckets, name
 
 class Hosting(Construct):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
