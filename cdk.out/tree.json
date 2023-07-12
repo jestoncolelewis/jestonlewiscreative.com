@@ -8,55 +8,38 @@
         "id": "JestonLewisCreativeFrontEndStack",
         "path": "JestonLewisCreativeFrontEndStack",
         "children": {
-          "Hosting": {
-            "id": "Hosting",
-            "path": "JestonLewisCreativeFrontEndStack/Hosting",
+          "Pipeline": {
+            "id": "Pipeline",
+            "path": "JestonLewisCreativeFrontEndStack/Pipeline",
             "children": {
-              "HostedZone": {
-                "id": "HostedZone",
-                "path": "JestonLewisCreativeFrontEndStack/Hosting/HostedZone",
+              "Pipeline": {
+                "id": "Pipeline",
+                "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline",
                 "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/HostedZone/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Route53::HostedZone",
-                      "aws:cdk:cloudformation:props": {
-                        "name": "jestonlewiscreative.com."
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_route53.CfnHostedZone",
-                      "version": "2.87.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_route53.HostedZone",
-                  "version": "2.87.0"
-                }
-              },
-              "Buckets": {
-                "id": "Buckets",
-                "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets",
-                "children": {
-                  "MainBucket": {
-                    "id": "MainBucket",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainBucket",
+                  "ArtifactsBucket": {
+                    "id": "ArtifactsBucket",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/ArtifactsBucket",
                     "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainBucket/Resource",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/ArtifactsBucket/Resource",
                         "attributes": {
                           "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
                           "aws:cdk:cloudformation:props": {
-                            "bucketName": "jestonlewiscreative.com",
-                            "publicAccessBlockConfiguration": {
-                              "blockPublicAcls": false
+                            "bucketEncryption": {
+                              "serverSideEncryptionConfiguration": [
+                                {
+                                  "serverSideEncryptionByDefault": {
+                                    "sseAlgorithm": "aws:kms"
+                                  }
+                                }
+                              ]
                             },
-                            "websiteConfiguration": {
-                              "indexDocument": "index.html",
-                              "errorDocument": "404error.html"
+                            "publicAccessBlockConfiguration": {
+                              "blockPublicAcls": true,
+                              "blockPublicPolicy": true,
+                              "ignorePublicAcls": true,
+                              "restrictPublicBuckets": true
                             }
                           }
                         },
@@ -67,48 +50,107 @@
                       },
                       "Policy": {
                         "id": "Policy",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainBucket/Policy",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/ArtifactsBucket/Policy",
                         "children": {
                           "Resource": {
                             "id": "Resource",
-                            "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainBucket/Policy/Resource",
+                            "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/ArtifactsBucket/Policy/Resource",
                             "attributes": {
                               "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
                               "aws:cdk:cloudformation:props": {
                                 "bucket": {
-                                  "Ref": "HostingBucketsMainBucket04C1DE6F"
+                                  "Ref": "PipelineArtifactsBucketAEA9A052"
                                 },
                                 "policyDocument": {
                                   "Statement": [
                                     {
-                                      "Action": "s3:GetObject",
-                                      "Effect": "Allow",
+                                      "Action": "s3:*",
+                                      "Condition": {
+                                        "Bool": {
+                                          "aws:SecureTransport": "false"
+                                        }
+                                      },
+                                      "Effect": "Deny",
                                       "Principal": {
                                         "AWS": "*"
                                       },
-                                      "Resource": {
-                                        "Fn::Join": [
-                                          "",
-                                          [
-                                            {
-                                              "Fn::GetAtt": [
-                                                "HostingBucketsMainBucket04C1DE6F",
-                                                "Arn"
-                                              ]
-                                            },
-                                            "/*"
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "PipelineArtifactsBucketAEA9A052",
+                                            "Arn"
                                           ]
-                                        ]
-                                      }
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "PipelineArtifactsBucketAEA9A052",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
                                     },
                                     {
-                                      "Action": "s3:GetObject",
+                                      "Action": [
+                                        "s3:GetBucket*",
+                                        "s3:GetObject*",
+                                        "s3:List*"
+                                      ],
                                       "Effect": "Allow",
                                       "Principal": {
-                                        "AWS": "*"
+                                        "AWS": {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::",
+                                              {
+                                                "Ref": "AWS::AccountId"
+                                              },
+                                              ":role/cdk-hnb659fds-deploy-role-",
+                                              {
+                                                "Ref": "AWS::AccountId"
+                                              },
+                                              "-",
+                                              {
+                                                "Ref": "AWS::Region"
+                                              }
+                                            ]
+                                          ]
+                                        }
                                       },
-                                      "Resource": "arn:aws:s3:::jestonlewiscreative.com/*",
-                                      "Sid": "PublicReadGetObject"
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "PipelineArtifactsBucketAEA9A052",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "PipelineArtifactsBucketAEA9A052",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
                                     }
                                   ],
                                   "Version": "2012-10-17"
@@ -132,209 +174,1107 @@
                       "version": "2.87.0"
                     }
                   },
-                  "wwwBucket": {
-                    "id": "wwwBucket",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/wwwBucket",
+                  "Role": {
+                    "id": "Role",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Role",
                     "children": {
+                      "ImportRole": {
+                        "id": "ImportRole",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Role/ImportRole",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.Resource",
+                          "version": "2.87.0"
+                        }
+                      },
                       "Resource": {
                         "id": "Resource",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/wwwBucket/Resource",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Role/Resource",
                         "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Role",
                           "aws:cdk:cloudformation:props": {
-                            "bucketName": "www.jestonlewiscreative.com",
-                            "websiteConfiguration": {
-                              "redirectAllRequestsTo": {
-                                "hostName": "jestonlewiscreative.com"
-                              }
+                            "assumeRolePolicyDocument": {
+                              "Statement": [
+                                {
+                                  "Action": "sts:AssumeRole",
+                                  "Effect": "Allow",
+                                  "Principal": {
+                                    "Service": "codepipeline.amazonaws.com"
+                                  }
+                                }
+                              ],
+                              "Version": "2012-10-17"
                             }
                           }
                         },
                         "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                          "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                          "version": "2.87.0"
+                        }
+                      },
+                      "DefaultPolicy": {
+                        "id": "DefaultPolicy",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Role/DefaultPolicy",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Role/DefaultPolicy/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                              "aws:cdk:cloudformation:props": {
+                                "policyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": [
+                                        "s3:Abort*",
+                                        "s3:DeleteObject*",
+                                        "s3:GetBucket*",
+                                        "s3:GetObject*",
+                                        "s3:List*",
+                                        "s3:PutObject",
+                                        "s3:PutObjectLegalHold",
+                                        "s3:PutObjectRetention",
+                                        "s3:PutObjectTagging",
+                                        "s3:PutObjectVersionTagging"
+                                      ],
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "PipelineArtifactsBucketAEA9A052",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              {
+                                                "Fn::GetAtt": [
+                                                  "PipelineArtifactsBucketAEA9A052",
+                                                  "Arn"
+                                                ]
+                                              },
+                                              "/*"
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Resource": [
+                                        {
+                                          "Fn::GetAtt": [
+                                            "PipelineCodeBuildActionRole226DB0CB",
+                                            "Arn"
+                                          ]
+                                        },
+                                        {
+                                          "Fn::Join": [
+                                            "",
+                                            [
+                                              "arn:",
+                                              {
+                                                "Ref": "AWS::Partition"
+                                              },
+                                              ":iam::",
+                                              {
+                                                "Ref": "AWS::AccountId"
+                                              },
+                                              ":role/cdk-hnb659fds-deploy-role-",
+                                              {
+                                                "Ref": "AWS::AccountId"
+                                              },
+                                              "-",
+                                              {
+                                                "Ref": "AWS::Region"
+                                              }
+                                            ]
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                },
+                                "policyName": "PipelineRoleDefaultPolicy7BDC1ABB",
+                                "roles": [
+                                  {
+                                    "Ref": "PipelineRoleB27FAA37"
+                                  }
+                                ]
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                              "version": "2.87.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.Policy",
                           "version": "2.87.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                      "fqn": "aws-cdk-lib.aws_iam.Role",
                       "version": "2.87.0"
                     }
                   },
-                  "MainDistro": {
-                    "id": "MainDistro",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainDistro",
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::CodePipeline::Pipeline",
+                      "aws:cdk:cloudformation:props": {
+                        "roleArn": {
+                          "Fn::GetAtt": [
+                            "PipelineRoleB27FAA37",
+                            "Arn"
+                          ]
+                        },
+                        "stages": [
+                          {
+                            "name": "Source",
+                            "actions": [
+                              {
+                                "name": "jestoncolelewis_jestonlewiscreative.com",
+                                "outputArtifacts": [
+                                  {
+                                    "name": "jestoncolelewis_jestonlewiscreative_com_Source"
+                                  }
+                                ],
+                                "actionTypeId": {
+                                  "category": "Source",
+                                  "version": "1",
+                                  "owner": "ThirdParty",
+                                  "provider": "GitHub"
+                                },
+                                "configuration": {
+                                  "Owner": "jestoncolelewis",
+                                  "Repo": "jestonlewiscreative.com",
+                                  "Branch": "main",
+                                  "OAuthToken": "{{resolve:secretsmanager:github-token:SecretString:::}}",
+                                  "PollForSourceChanges": false
+                                },
+                                "runOrder": 1
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Build",
+                            "actions": [
+                              {
+                                "name": "Synth",
+                                "inputArtifacts": [
+                                  {
+                                    "name": "jestoncolelewis_jestonlewiscreative_com_Source"
+                                  }
+                                ],
+                                "outputArtifacts": [
+                                  {
+                                    "name": "Synth_Output"
+                                  }
+                                ],
+                                "actionTypeId": {
+                                  "category": "Build",
+                                  "version": "1",
+                                  "owner": "AWS",
+                                  "provider": "CodeBuild"
+                                },
+                                "configuration": {
+                                  "ProjectName": {
+                                    "Ref": "PipelineBuildSynthCdkBuildProject6BEFA8E6"
+                                  },
+                                  "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"8779a2d9fc5684d368ab04b280a00af90916125e0e3471109f961f7002c55dc7\"}]"
+                                },
+                                "runOrder": 1,
+                                "roleArn": {
+                                  "Fn::GetAtt": [
+                                    "PipelineCodeBuildActionRole226DB0CB",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "name": "UpdatePipeline",
+                            "actions": [
+                              {
+                                "name": "SelfMutate",
+                                "inputArtifacts": [
+                                  {
+                                    "name": "Synth_Output"
+                                  }
+                                ],
+                                "actionTypeId": {
+                                  "category": "Build",
+                                  "version": "1",
+                                  "owner": "AWS",
+                                  "provider": "CodeBuild"
+                                },
+                                "configuration": {
+                                  "ProjectName": {
+                                    "Ref": "PipelineUpdatePipelineSelfMutationDAA41400"
+                                  },
+                                  "EnvironmentVariables": "[{\"name\":\"_PROJECT_CONFIG_HASH\",\"type\":\"PLAINTEXT\",\"value\":\"2d1ee6e9349148c35baf9ebda22ce660330968a54d84fca177a9a860e5dafe6a\"}]"
+                                },
+                                "runOrder": 1,
+                                "roleArn": {
+                                  "Fn::GetAtt": [
+                                    "PipelineCodeBuildActionRole226DB0CB",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "name": "Prod",
+                            "actions": [
+                              {
+                                "name": "Prepare",
+                                "inputArtifacts": [
+                                  {
+                                    "name": "Synth_Output"
+                                  }
+                                ],
+                                "actionTypeId": {
+                                  "category": "Deploy",
+                                  "version": "1",
+                                  "owner": "AWS",
+                                  "provider": "CloudFormation"
+                                },
+                                "configuration": {
+                                  "StackName": "Prod-WebService",
+                                  "Capabilities": "CAPABILITY_NAMED_IAM,CAPABILITY_AUTO_EXPAND",
+                                  "RoleArn": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":iam::",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        ":role/cdk-hnb659fds-cfn-exec-role-",
+                                        {
+                                          "Ref": "AWS::AccountId"
+                                        },
+                                        "-",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        }
+                                      ]
+                                    ]
+                                  },
+                                  "ActionMode": "CHANGE_SET_REPLACE",
+                                  "ChangeSetName": "PipelineChange",
+                                  "TemplatePath": "Synth_Output::assembly-JestonLewisCreativeFrontEndStack-Prod/JestonLewisCreativeFrontEndStackProdWebServiceA0672800.template.json"
+                                },
+                                "runOrder": 1,
+                                "roleArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":role/cdk-hnb659fds-deploy-role-",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      "-",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      }
+                                    ]
+                                  ]
+                                }
+                              },
+                              {
+                                "name": "Deploy",
+                                "actionTypeId": {
+                                  "category": "Deploy",
+                                  "version": "1",
+                                  "owner": "AWS",
+                                  "provider": "CloudFormation"
+                                },
+                                "configuration": {
+                                  "StackName": "Prod-WebService",
+                                  "ActionMode": "CHANGE_SET_EXECUTE",
+                                  "ChangeSetName": "PipelineChange"
+                                },
+                                "runOrder": 2,
+                                "roleArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":iam::",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":role/cdk-hnb659fds-deploy-role-",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      "-",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      }
+                                    ]
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "artifactStore": {
+                          "type": "S3",
+                          "location": {
+                            "Ref": "PipelineArtifactsBucketAEA9A052"
+                          }
+                        },
+                        "name": "FrontEndPipeline",
+                        "restartExecutionOnUpdate": true
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_codepipeline.CfnPipeline",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "Source": {
+                    "id": "Source",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Source",
                     "children": {
-                      "Origin1": {
-                        "id": "Origin1",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainDistro/Origin1",
+                      "jestoncolelewis_jestonlewiscreative.com": {
+                        "id": "jestoncolelewis_jestonlewiscreative.com",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Source/jestoncolelewis_jestonlewiscreative.com",
+                        "children": {
+                          "WebhookResource": {
+                            "id": "WebhookResource",
+                            "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Source/jestoncolelewis_jestonlewiscreative.com/WebhookResource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::CodePipeline::Webhook",
+                              "aws:cdk:cloudformation:props": {
+                                "authentication": "GITHUB_HMAC",
+                                "authenticationConfiguration": {
+                                  "secretToken": "{{resolve:secretsmanager:github-token:SecretString:::}}"
+                                },
+                                "filters": [
+                                  {
+                                    "jsonPath": "$.ref",
+                                    "matchEquals": "refs/heads/{Branch}"
+                                  }
+                                ],
+                                "targetAction": "jestoncolelewis_jestonlewiscreative.com",
+                                "targetPipeline": {
+                                  "Ref": "Pipeline9850B417"
+                                },
+                                "targetPipelineVersion": 1,
+                                "registerWithThirdParty": true
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_codepipeline.CfnWebhook",
+                              "version": "2.87.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.69"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.69"
+                    }
+                  },
+                  "Build": {
+                    "id": "Build",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build",
+                    "children": {
+                      "Synth": {
+                        "id": "Synth",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth",
+                        "children": {
+                          "CdkBuildProject": {
+                            "id": "CdkBuildProject",
+                            "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject",
+                            "children": {
+                              "Role": {
+                                "id": "Role",
+                                "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Role",
+                                "children": {
+                                  "ImportRole": {
+                                    "id": "ImportRole",
+                                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/ImportRole",
+                                    "constructInfo": {
+                                      "fqn": "aws-cdk-lib.Resource",
+                                      "version": "2.87.0"
+                                    }
+                                  },
+                                  "Resource": {
+                                    "id": "Resource",
+                                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/Resource",
+                                    "attributes": {
+                                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                                      "aws:cdk:cloudformation:props": {
+                                        "assumeRolePolicyDocument": {
+                                          "Statement": [
+                                            {
+                                              "Action": "sts:AssumeRole",
+                                              "Effect": "Allow",
+                                              "Principal": {
+                                                "Service": "codebuild.amazonaws.com"
+                                              }
+                                            }
+                                          ],
+                                          "Version": "2012-10-17"
+                                        }
+                                      }
+                                    },
+                                    "constructInfo": {
+                                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                                      "version": "2.87.0"
+                                    }
+                                  },
+                                  "DefaultPolicy": {
+                                    "id": "DefaultPolicy",
+                                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/DefaultPolicy",
+                                    "children": {
+                                      "Resource": {
+                                        "id": "Resource",
+                                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/DefaultPolicy/Resource",
+                                        "attributes": {
+                                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                          "aws:cdk:cloudformation:props": {
+                                            "policyDocument": {
+                                              "Statement": [
+                                                {
+                                                  "Action": [
+                                                    "logs:CreateLogGroup",
+                                                    "logs:CreateLogStream",
+                                                    "logs:PutLogEvents"
+                                                  ],
+                                                  "Effect": "Allow",
+                                                  "Resource": [
+                                                    {
+                                                      "Fn::Join": [
+                                                        "",
+                                                        [
+                                                          "arn:aws:logs:us-west-2:706391136734:log-group:/aws/codebuild/",
+                                                          {
+                                                            "Ref": "PipelineBuildSynthCdkBuildProject6BEFA8E6"
+                                                          },
+                                                          ":*"
+                                                        ]
+                                                      ]
+                                                    },
+                                                    {
+                                                      "Fn::Join": [
+                                                        "",
+                                                        [
+                                                          "arn:aws:logs:us-west-2:706391136734:log-group:/aws/codebuild/",
+                                                          {
+                                                            "Ref": "PipelineBuildSynthCdkBuildProject6BEFA8E6"
+                                                          }
+                                                        ]
+                                                      ]
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "Action": [
+                                                    "codebuild:BatchPutCodeCoverages",
+                                                    "codebuild:BatchPutTestCases",
+                                                    "codebuild:CreateReport",
+                                                    "codebuild:CreateReportGroup",
+                                                    "codebuild:UpdateReport"
+                                                  ],
+                                                  "Effect": "Allow",
+                                                  "Resource": {
+                                                    "Fn::Join": [
+                                                      "",
+                                                      [
+                                                        "arn:aws:codebuild:us-west-2:706391136734:report-group/",
+                                                        {
+                                                          "Ref": "PipelineBuildSynthCdkBuildProject6BEFA8E6"
+                                                        },
+                                                        "-*"
+                                                      ]
+                                                    ]
+                                                  }
+                                                },
+                                                {
+                                                  "Action": [
+                                                    "s3:Abort*",
+                                                    "s3:DeleteObject*",
+                                                    "s3:GetBucket*",
+                                                    "s3:GetObject*",
+                                                    "s3:List*",
+                                                    "s3:PutObject",
+                                                    "s3:PutObjectLegalHold",
+                                                    "s3:PutObjectRetention",
+                                                    "s3:PutObjectTagging",
+                                                    "s3:PutObjectVersionTagging"
+                                                  ],
+                                                  "Effect": "Allow",
+                                                  "Resource": [
+                                                    {
+                                                      "Fn::GetAtt": [
+                                                        "PipelineArtifactsBucketAEA9A052",
+                                                        "Arn"
+                                                      ]
+                                                    },
+                                                    {
+                                                      "Fn::Join": [
+                                                        "",
+                                                        [
+                                                          {
+                                                            "Fn::GetAtt": [
+                                                              "PipelineArtifactsBucketAEA9A052",
+                                                              "Arn"
+                                                            ]
+                                                          },
+                                                          "/*"
+                                                        ]
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ],
+                                              "Version": "2012-10-17"
+                                            },
+                                            "policyName": "PipelineBuildSynthCdkBuildProjectRoleDefaultPolicyFB6C941C",
+                                            "roles": [
+                                              {
+                                                "Ref": "PipelineBuildSynthCdkBuildProjectRole231EEA2A"
+                                              }
+                                            ]
+                                          }
+                                        },
+                                        "constructInfo": {
+                                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                          "version": "2.87.0"
+                                        }
+                                      }
+                                    },
+                                    "constructInfo": {
+                                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                                      "version": "2.87.0"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                                  "version": "2.87.0"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
+                                  "aws:cdk:cloudformation:props": {
+                                    "artifacts": {
+                                      "type": "CODEPIPELINE"
+                                    },
+                                    "environment": {
+                                      "type": "LINUX_CONTAINER",
+                                      "image": "aws/codebuild/standard:6.0",
+                                      "imagePullCredentialsType": "CODEBUILD",
+                                      "privilegedMode": false,
+                                      "computeType": "BUILD_GENERAL1_SMALL"
+                                    },
+                                    "serviceRole": {
+                                      "Fn::GetAtt": [
+                                        "PipelineBuildSynthCdkBuildProjectRole231EEA2A",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "source": {
+                                      "type": "CODEPIPELINE",
+                                      "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"build\": {\n      \"commands\": [\n        \"npm install -g aws-cdk\",\n        \"python -m pip install -r requirements.txt\",\n        \"cdk synth\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"base-directory\": \"cdk.out\",\n    \"files\": \"**/*\"\n  }\n}"
+                                    },
+                                    "cache": {
+                                      "type": "NO_CACHE"
+                                    },
+                                    "description": "Pipeline step JestonLewisCreativeFrontEndStack/Pipeline/Build/Synth",
+                                    "encryptionKey": "alias/aws/s3"
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
+                                  "version": "2.87.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_codebuild.PipelineProject",
+                              "version": "2.87.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.69"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.69"
+                    }
+                  },
+                  "UpdatePipeline": {
+                    "id": "UpdatePipeline",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/UpdatePipeline",
+                    "children": {
+                      "SelfMutate": {
+                        "id": "SelfMutate",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/UpdatePipeline/SelfMutate",
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.69"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.69"
+                    }
+                  },
+                  "Prod": {
+                    "id": "Prod",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Prod",
+                    "children": {
+                      "Prepare": {
+                        "id": "Prepare",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Prod/Prepare",
                         "constructInfo": {
                           "fqn": "constructs.Construct",
                           "version": "10.2.69"
                         }
                       },
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainDistro/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
-                          "aws:cdk:cloudformation:props": {
-                            "distributionConfig": {
-                              "enabled": true,
-                              "origins": [
-                                {
-                                  "domainName": {
-                                    "Fn::Select": [
-                                      2,
-                                      {
-                                        "Fn::Split": [
-                                          "/",
-                                          {
-                                            "Fn::GetAtt": [
-                                              "HostingBucketsMainBucket04C1DE6F",
-                                              "WebsiteURL"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  "id": "JestonLewisCreativeFrontEndStackHostingBucketsMainDistroOrigin17460CDAF",
-                                  "customOriginConfig": {
-                                    "originSslProtocols": [
-                                      "TLSv1.2"
-                                    ],
-                                    "originProtocolPolicy": "http-only"
-                                  }
-                                }
-                              ],
-                              "defaultCacheBehavior": {
-                                "pathPattern": "*",
-                                "targetOriginId": "JestonLewisCreativeFrontEndStackHostingBucketsMainDistroOrigin17460CDAF",
-                                "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
-                                "compress": true,
-                                "viewerProtocolPolicy": "allow-all"
-                              },
-                              "httpVersion": "http2",
-                              "ipv6Enabled": true
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
-                          "version": "2.87.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
-                      "version": "2.87.0"
-                    }
-                  },
-                  "wwwDistro": {
-                    "id": "wwwDistro",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/wwwDistro",
-                    "children": {
-                      "Origin1": {
-                        "id": "Origin1",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/wwwDistro/Origin1",
+                      "Deploy": {
+                        "id": "Deploy",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Prod/Deploy",
                         "constructInfo": {
                           "fqn": "constructs.Construct",
                           "version": "10.2.69"
                         }
-                      },
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.69"
+                    }
+                  },
+                  "MutableRolearn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}": {
+                    "id": "MutableRolearn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/MutableRolearn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "arn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}": {
+                    "id": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/arn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+                    "children": {
+                      "8389e75f-0810-4838-bf64-d6f85a95cf83": {
+                        "id": "8389e75f-0810-4838-bf64-d6f85a95cf83",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/arn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}/8389e75f-0810-4838-bf64-d6f85a95cf83",
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.69"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "MutableRolearn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}": {
+                    "id": "MutableRolearn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/MutableRolearn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "arn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}": {
+                    "id": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/arn:${AWS::Partition}:iam::${AWS::AccountId}:role--cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.87.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_codepipeline.Pipeline",
+                  "version": "2.87.0"
+                }
+              },
+              "CodeBuildActionRole": {
+                "id": "CodeBuildActionRole",
+                "path": "JestonLewisCreativeFrontEndStack/Pipeline/CodeBuildActionRole",
+                "children": {
+                  "ImportCodeBuildActionRole": {
+                    "id": "ImportCodeBuildActionRole",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/CodeBuildActionRole/ImportCodeBuildActionRole",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.Resource",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "Resource": {
+                    "id": "Resource",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/CodeBuildActionRole/Resource",
+                    "attributes": {
+                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                      "aws:cdk:cloudformation:props": {
+                        "assumeRolePolicyDocument": {
+                          "Statement": [
+                            {
+                              "Action": "sts:AssumeRole",
+                              "Effect": "Allow",
+                              "Principal": {
+                                "AWS": {
+                                  "Fn::GetAtt": [
+                                    "PipelineRoleB27FAA37",
+                                    "Arn"
+                                  ]
+                                }
+                              }
+                            }
+                          ],
+                          "Version": "2012-10-17"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "DefaultPolicy": {
+                    "id": "DefaultPolicy",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/CodeBuildActionRole/DefaultPolicy",
+                    "children": {
                       "Resource": {
                         "id": "Resource",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/wwwDistro/Resource",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/CodeBuildActionRole/DefaultPolicy/Resource",
                         "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
                           "aws:cdk:cloudformation:props": {
-                            "distributionConfig": {
-                              "enabled": true,
-                              "origins": [
+                            "policyDocument": {
+                              "Statement": [
                                 {
-                                  "domainName": {
-                                    "Fn::Select": [
-                                      2,
-                                      {
-                                        "Fn::Split": [
-                                          "/",
-                                          {
-                                            "Fn::GetAtt": [
-                                              "HostingBucketswwwBucket911E0031",
-                                              "WebsiteURL"
-                                            ]
-                                          }
-                                        ]
-                                      }
-                                    ]
-                                  },
-                                  "id": "JestonLewisCreativeFrontEndStackHostingBucketswwwDistroOrigin11C02E6CE",
-                                  "customOriginConfig": {
-                                    "originSslProtocols": [
-                                      "TLSv1.2"
-                                    ],
-                                    "originProtocolPolicy": "http-only"
-                                  }
+                                  "Action": [
+                                    "codebuild:BatchGetBuilds",
+                                    "codebuild:StartBuild",
+                                    "codebuild:StopBuild"
+                                  ],
+                                  "Effect": "Allow",
+                                  "Resource": [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineBuildSynthCdkBuildProject6BEFA8E6",
+                                        "Arn"
+                                      ]
+                                    },
+                                    {
+                                      "Fn::GetAtt": [
+                                        "PipelineUpdatePipelineSelfMutationDAA41400",
+                                        "Arn"
+                                      ]
+                                    }
+                                  ]
                                 }
                               ],
-                              "defaultCacheBehavior": {
-                                "pathPattern": "*",
-                                "targetOriginId": "JestonLewisCreativeFrontEndStackHostingBucketswwwDistroOrigin11C02E6CE",
-                                "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
-                                "compress": true,
-                                "viewerProtocolPolicy": "allow-all"
-                              },
-                              "httpVersion": "http2",
-                              "ipv6Enabled": true
+                              "Version": "2012-10-17"
+                            },
+                            "policyName": "PipelineCodeBuildActionRoleDefaultPolicy1D62A6FE",
+                            "roles": [
+                              {
+                                "Ref": "PipelineCodeBuildActionRole226DB0CB"
+                              }
+                            ]
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                          "version": "2.87.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_iam.Policy",
+                      "version": "2.87.0"
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_iam.Role",
+                  "version": "2.87.0"
+                }
+              },
+              "UpdatePipeline": {
+                "id": "UpdatePipeline",
+                "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline",
+                "children": {
+                  "SelfMutation": {
+                    "id": "SelfMutation",
+                    "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation",
+                    "children": {
+                      "Role": {
+                        "id": "Role",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Role",
+                        "children": {
+                          "ImportRole": {
+                            "id": "ImportRole",
+                            "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Role/ImportRole",
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.Resource",
+                              "version": "2.87.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Role/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::IAM::Role",
+                              "aws:cdk:cloudformation:props": {
+                                "assumeRolePolicyDocument": {
+                                  "Statement": [
+                                    {
+                                      "Action": "sts:AssumeRole",
+                                      "Effect": "Allow",
+                                      "Principal": {
+                                        "Service": "codebuild.amazonaws.com"
+                                      }
+                                    }
+                                  ],
+                                  "Version": "2012-10-17"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.CfnRole",
+                              "version": "2.87.0"
+                            }
+                          },
+                          "DefaultPolicy": {
+                            "id": "DefaultPolicy",
+                            "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Role/DefaultPolicy",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Role/DefaultPolicy/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
+                                  "aws:cdk:cloudformation:props": {
+                                    "policyDocument": {
+                                      "Statement": [
+                                        {
+                                          "Action": [
+                                            "logs:CreateLogGroup",
+                                            "logs:CreateLogStream",
+                                            "logs:PutLogEvents"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": [
+                                            {
+                                              "Fn::Join": [
+                                                "",
+                                                [
+                                                  "arn:aws:logs:us-west-2:706391136734:log-group:/aws/codebuild/",
+                                                  {
+                                                    "Ref": "PipelineUpdatePipelineSelfMutationDAA41400"
+                                                  },
+                                                  ":*"
+                                                ]
+                                              ]
+                                            },
+                                            {
+                                              "Fn::Join": [
+                                                "",
+                                                [
+                                                  "arn:aws:logs:us-west-2:706391136734:log-group:/aws/codebuild/",
+                                                  {
+                                                    "Ref": "PipelineUpdatePipelineSelfMutationDAA41400"
+                                                  }
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "Action": [
+                                            "codebuild:BatchPutCodeCoverages",
+                                            "codebuild:BatchPutTestCases",
+                                            "codebuild:CreateReport",
+                                            "codebuild:CreateReportGroup",
+                                            "codebuild:UpdateReport"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": {
+                                            "Fn::Join": [
+                                              "",
+                                              [
+                                                "arn:aws:codebuild:us-west-2:706391136734:report-group/",
+                                                {
+                                                  "Ref": "PipelineUpdatePipelineSelfMutationDAA41400"
+                                                },
+                                                "-*"
+                                              ]
+                                            ]
+                                          }
+                                        },
+                                        {
+                                          "Action": "sts:AssumeRole",
+                                          "Condition": {
+                                            "ForAnyValue:StringEquals": {
+                                              "iam:ResourceTag/aws-cdk:bootstrap-role": [
+                                                "image-publishing",
+                                                "file-publishing",
+                                                "deploy"
+                                              ]
+                                            }
+                                          },
+                                          "Effect": "Allow",
+                                          "Resource": "arn:*:iam::706391136734:role/*"
+                                        },
+                                        {
+                                          "Action": [
+                                            "cloudformation:DescribeStacks",
+                                            "s3:ListBucket"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": "*"
+                                        },
+                                        {
+                                          "Action": [
+                                            "s3:GetBucket*",
+                                            "s3:GetObject*",
+                                            "s3:List*"
+                                          ],
+                                          "Effect": "Allow",
+                                          "Resource": [
+                                            {
+                                              "Fn::GetAtt": [
+                                                "PipelineArtifactsBucketAEA9A052",
+                                                "Arn"
+                                              ]
+                                            },
+                                            {
+                                              "Fn::Join": [
+                                                "",
+                                                [
+                                                  {
+                                                    "Fn::GetAtt": [
+                                                      "PipelineArtifactsBucketAEA9A052",
+                                                      "Arn"
+                                                    ]
+                                                  },
+                                                  "/*"
+                                                ]
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      ],
+                                      "Version": "2012-10-17"
+                                    },
+                                    "policyName": "PipelineUpdatePipelineSelfMutationRoleDefaultPolicyA225DA4E",
+                                    "roles": [
+                                      {
+                                        "Ref": "PipelineUpdatePipelineSelfMutationRole57E559E8"
+                                      }
+                                    ]
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
+                                  "version": "2.87.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_iam.Policy",
+                              "version": "2.87.0"
                             }
                           }
                         },
                         "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                          "fqn": "aws-cdk-lib.aws_iam.Role",
                           "version": "2.87.0"
                         }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
-                      "version": "2.87.0"
-                    }
-                  },
-                  "Certificate": {
-                    "id": "Certificate",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/Certificate",
-                    "children": {
+                      },
                       "Resource": {
                         "id": "Resource",
-                        "path": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/Certificate/Resource",
+                        "path": "JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Resource",
                         "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::CertificateManager::Certificate",
+                          "aws:cdk:cloudformation:type": "AWS::CodeBuild::Project",
                           "aws:cdk:cloudformation:props": {
-                            "domainName": "*.jestonlewiscreative.com",
-                            "domainValidationOptions": [
-                              {
-                                "domainName": "*.jestonlewiscreative.com",
-                                "validationDomain": "jestonlewiscreative.com"
-                              }
-                            ],
-                            "tags": [
-                              {
-                                "key": "Name",
-                                "value": "JestonLewisCreativeFrontEndStack/Hosting/Buckets/Certificate"
-                              }
-                            ],
-                            "validationMethod": "EMAIL"
+                            "artifacts": {
+                              "type": "CODEPIPELINE"
+                            },
+                            "environment": {
+                              "type": "LINUX_CONTAINER",
+                              "image": "aws/codebuild/standard:6.0",
+                              "imagePullCredentialsType": "CODEBUILD",
+                              "privilegedMode": false,
+                              "computeType": "BUILD_GENERAL1_SMALL"
+                            },
+                            "serviceRole": {
+                              "Fn::GetAtt": [
+                                "PipelineUpdatePipelineSelfMutationRole57E559E8",
+                                "Arn"
+                              ]
+                            },
+                            "source": {
+                              "type": "CODEPIPELINE",
+                              "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"install\": {\n      \"commands\": [\n        \"npm install -g aws-cdk@2\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"cdk -a . deploy JestonLewisCreativeFrontEndStack --require-approval=never --verbose\"\n      ]\n    }\n  }\n}"
+                            },
+                            "cache": {
+                              "type": "NO_CACHE"
+                            },
+                            "description": "Pipeline step JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutate",
+                            "encryptionKey": "alias/aws/s3",
+                            "name": "FrontEndPipeline-selfupdate"
                           }
                         },
                         "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_certificatemanager.CfnCertificate",
+                          "fqn": "aws-cdk-lib.aws_codebuild.CfnProject",
                           "version": "2.87.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_certificatemanager.Certificate",
+                      "fqn": "aws-cdk-lib.aws_codebuild.PipelineProject",
                       "version": "2.87.0"
                     }
                   }
@@ -343,108 +1283,512 @@
                   "fqn": "constructs.Construct",
                   "version": "10.2.69"
                 }
-              },
-              "MainRecord": {
-                "id": "MainRecord",
-                "path": "JestonLewisCreativeFrontEndStack/Hosting/MainRecord",
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.pipelines.CodePipeline",
+              "version": "2.87.0"
+            }
+          },
+          "Prod": {
+            "id": "Prod",
+            "path": "JestonLewisCreativeFrontEndStack/Prod",
+            "children": {
+              "WebService": {
+                "id": "WebService",
+                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService",
                 "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/MainRecord/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
-                      "aws:cdk:cloudformation:props": {
-                        "name": "jestonlewiscreative.com.",
-                        "type": "A",
-                        "aliasTarget": {
-                          "hostedZoneId": {
-                            "Fn::FindInMap": [
-                              "AWSCloudFrontPartitionHostedZoneIdMap",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              "zoneId"
-                            ]
-                          },
-                          "dnsName": {
-                            "Fn::GetAtt": [
-                              "HostingBucketsMainDistro1726F27C",
-                              "DomainName"
-                            ]
+                  "Hosting": {
+                    "id": "Hosting",
+                    "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting",
+                    "children": {
+                      "HostedZone": {
+                        "id": "HostedZone",
+                        "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/HostedZone",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/HostedZone/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Route53::HostedZone",
+                              "aws:cdk:cloudformation:props": {
+                                "name": "jestonlewiscreative.com."
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_route53.CfnHostedZone",
+                              "version": "2.87.0"
+                            }
                           }
                         },
-                        "hostedZoneId": {
-                          "Ref": "HostingHostedZoneBE37AE35"
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_route53.HostedZone",
+                          "version": "2.87.0"
+                        }
+                      },
+                      "Buckets": {
+                        "id": "Buckets",
+                        "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets",
+                        "children": {
+                          "MainBucket": {
+                            "id": "MainBucket",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainBucket",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainBucket/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                                  "aws:cdk:cloudformation:props": {
+                                    "bucketName": "jestonlewiscreative.com",
+                                    "publicAccessBlockConfiguration": {
+                                      "blockPublicAcls": false
+                                    },
+                                    "websiteConfiguration": {
+                                      "indexDocument": "index.html",
+                                      "errorDocument": "404error.html"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                                  "version": "2.87.0"
+                                }
+                              },
+                              "Policy": {
+                                "id": "Policy",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainBucket/Policy",
+                                "children": {
+                                  "Resource": {
+                                    "id": "Resource",
+                                    "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainBucket/Policy/Resource",
+                                    "attributes": {
+                                      "aws:cdk:cloudformation:type": "AWS::S3::BucketPolicy",
+                                      "aws:cdk:cloudformation:props": {
+                                        "bucket": {
+                                          "Ref": "HostingBucketsMainBucket04C1DE6F"
+                                        },
+                                        "policyDocument": {
+                                          "Statement": [
+                                            {
+                                              "Action": "s3:GetObject",
+                                              "Effect": "Allow",
+                                              "Principal": {
+                                                "AWS": "*"
+                                              },
+                                              "Resource": {
+                                                "Fn::Join": [
+                                                  "",
+                                                  [
+                                                    {
+                                                      "Fn::GetAtt": [
+                                                        "HostingBucketsMainBucket04C1DE6F",
+                                                        "Arn"
+                                                      ]
+                                                    },
+                                                    "/*"
+                                                  ]
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "Action": "s3:GetObject",
+                                              "Effect": "Allow",
+                                              "Principal": {
+                                                "AWS": "*"
+                                              },
+                                              "Resource": "arn:aws:s3:::jestonlewiscreative.com/*",
+                                              "Sid": "PublicReadGetObject"
+                                            }
+                                          ],
+                                          "Version": "2012-10-17"
+                                        }
+                                      }
+                                    },
+                                    "constructInfo": {
+                                      "fqn": "aws-cdk-lib.aws_s3.CfnBucketPolicy",
+                                      "version": "2.87.0"
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_s3.BucketPolicy",
+                                  "version": "2.87.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                              "version": "2.87.0"
+                            }
+                          },
+                          "wwwBucket": {
+                            "id": "wwwBucket",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/wwwBucket",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/wwwBucket/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                                  "aws:cdk:cloudformation:props": {
+                                    "bucketName": "www.jestonlewiscreative.com",
+                                    "websiteConfiguration": {
+                                      "redirectAllRequestsTo": {
+                                        "hostName": "jestonlewiscreative.com"
+                                      }
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                                  "version": "2.87.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+                              "version": "2.87.0"
+                            }
+                          },
+                          "MainDistro": {
+                            "id": "MainDistro",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainDistro",
+                            "children": {
+                              "Origin1": {
+                                "id": "Origin1",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainDistro/Origin1",
+                                "constructInfo": {
+                                  "fqn": "constructs.Construct",
+                                  "version": "10.2.69"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/MainDistro/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                                  "aws:cdk:cloudformation:props": {
+                                    "distributionConfig": {
+                                      "enabled": true,
+                                      "origins": [
+                                        {
+                                          "domainName": {
+                                            "Fn::Select": [
+                                              2,
+                                              {
+                                                "Fn::Split": [
+                                                  "/",
+                                                  {
+                                                    "Fn::GetAtt": [
+                                                      "HostingBucketsMainBucket04C1DE6F",
+                                                      "WebsiteURL"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          "id": "JestonLewisCreativeFrontEndStackProdWebServiceHostingBucketsMainDistroOrigin157C4FC42",
+                                          "customOriginConfig": {
+                                            "originSslProtocols": [
+                                              "TLSv1.2"
+                                            ],
+                                            "originProtocolPolicy": "http-only"
+                                          }
+                                        }
+                                      ],
+                                      "defaultCacheBehavior": {
+                                        "pathPattern": "*",
+                                        "targetOriginId": "JestonLewisCreativeFrontEndStackProdWebServiceHostingBucketsMainDistroOrigin157C4FC42",
+                                        "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                        "compress": true,
+                                        "viewerProtocolPolicy": "allow-all"
+                                      },
+                                      "httpVersion": "http2",
+                                      "ipv6Enabled": true
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                                  "version": "2.87.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
+                              "version": "2.87.0"
+                            }
+                          },
+                          "wwwDistro": {
+                            "id": "wwwDistro",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/wwwDistro",
+                            "children": {
+                              "Origin1": {
+                                "id": "Origin1",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/wwwDistro/Origin1",
+                                "constructInfo": {
+                                  "fqn": "constructs.Construct",
+                                  "version": "10.2.69"
+                                }
+                              },
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/wwwDistro/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::CloudFront::Distribution",
+                                  "aws:cdk:cloudformation:props": {
+                                    "distributionConfig": {
+                                      "enabled": true,
+                                      "origins": [
+                                        {
+                                          "domainName": {
+                                            "Fn::Select": [
+                                              2,
+                                              {
+                                                "Fn::Split": [
+                                                  "/",
+                                                  {
+                                                    "Fn::GetAtt": [
+                                                      "HostingBucketswwwBucket911E0031",
+                                                      "WebsiteURL"
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          },
+                                          "id": "JestonLewisCreativeFrontEndStackProdWebServiceHostingBucketswwwDistroOrigin1A704DCEF",
+                                          "customOriginConfig": {
+                                            "originSslProtocols": [
+                                              "TLSv1.2"
+                                            ],
+                                            "originProtocolPolicy": "http-only"
+                                          }
+                                        }
+                                      ],
+                                      "defaultCacheBehavior": {
+                                        "pathPattern": "*",
+                                        "targetOriginId": "JestonLewisCreativeFrontEndStackProdWebServiceHostingBucketswwwDistroOrigin1A704DCEF",
+                                        "cachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+                                        "compress": true,
+                                        "viewerProtocolPolicy": "allow-all"
+                                      },
+                                      "httpVersion": "http2",
+                                      "ipv6Enabled": true
+                                    }
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_cloudfront.CfnDistribution",
+                                  "version": "2.87.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_cloudfront.Distribution",
+                              "version": "2.87.0"
+                            }
+                          },
+                          "Certificate": {
+                            "id": "Certificate",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/Certificate",
+                            "children": {
+                              "Resource": {
+                                "id": "Resource",
+                                "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/Certificate/Resource",
+                                "attributes": {
+                                  "aws:cdk:cloudformation:type": "AWS::CertificateManager::Certificate",
+                                  "aws:cdk:cloudformation:props": {
+                                    "domainName": "*.jestonlewiscreative.com",
+                                    "domainValidationOptions": [
+                                      {
+                                        "domainName": "*.jestonlewiscreative.com",
+                                        "validationDomain": "jestonlewiscreative.com"
+                                      }
+                                    ],
+                                    "tags": [
+                                      {
+                                        "key": "Name",
+                                        "value": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Buckets/Certificate"
+                                      }
+                                    ],
+                                    "validationMethod": "EMAIL"
+                                  }
+                                },
+                                "constructInfo": {
+                                  "fqn": "aws-cdk-lib.aws_certificatemanager.CfnCertificate",
+                                  "version": "2.87.0"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_certificatemanager.Certificate",
+                              "version": "2.87.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.69"
+                        }
+                      },
+                      "MainRecord": {
+                        "id": "MainRecord",
+                        "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/MainRecord",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/MainRecord/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                              "aws:cdk:cloudformation:props": {
+                                "name": "jestonlewiscreative.com.",
+                                "type": "A",
+                                "aliasTarget": {
+                                  "hostedZoneId": {
+                                    "Fn::FindInMap": [
+                                      "AWSCloudFrontPartitionHostedZoneIdMap",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      "zoneId"
+                                    ]
+                                  },
+                                  "dnsName": {
+                                    "Fn::GetAtt": [
+                                      "HostingBucketsMainDistro1726F27C",
+                                      "DomainName"
+                                    ]
+                                  }
+                                },
+                                "hostedZoneId": {
+                                  "Ref": "HostingHostedZoneBE37AE35"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                              "version": "2.87.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_route53.RecordSet",
+                          "version": "2.87.0"
+                        }
+                      },
+                      "wwwRecord": {
+                        "id": "wwwRecord",
+                        "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/wwwRecord",
+                        "children": {
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/wwwRecord/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
+                              "aws:cdk:cloudformation:props": {
+                                "name": "www.jestonlewiscreative.com.",
+                                "type": "A",
+                                "aliasTarget": {
+                                  "hostedZoneId": {
+                                    "Fn::FindInMap": [
+                                      "AWSCloudFrontPartitionHostedZoneIdMap",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      "zoneId"
+                                    ]
+                                  },
+                                  "dnsName": {
+                                    "Fn::GetAtt": [
+                                      "HostingBucketswwwDistro110A0869",
+                                      "DomainName"
+                                    ]
+                                  }
+                                },
+                                "hostedZoneId": {
+                                  "Ref": "HostingHostedZoneBE37AE35"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                              "version": "2.87.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_route53.RecordSet",
+                          "version": "2.87.0"
                         }
                       }
                     },
                     "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.69"
+                    }
+                  },
+                  "AWSCloudFrontPartitionHostedZoneIdMap": {
+                    "id": "AWSCloudFrontPartitionHostedZoneIdMap",
+                    "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/AWSCloudFrontPartitionHostedZoneIdMap",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnMapping",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "CDKMetadata": {
+                    "id": "CDKMetadata",
+                    "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/CDKMetadata",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/CDKMetadata/Default",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnResource",
+                          "version": "2.87.0"
+                        }
+                      },
+                      "Condition": {
+                        "id": "Condition",
+                        "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/CDKMetadata/Condition",
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.CfnCondition",
+                          "version": "2.87.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.69"
+                    }
+                  },
+                  "BootstrapVersion": {
+                    "id": "BootstrapVersion",
+                    "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/BootstrapVersion",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnParameter",
+                      "version": "2.87.0"
+                    }
+                  },
+                  "CheckBootstrapVersion": {
+                    "id": "CheckBootstrapVersion",
+                    "path": "JestonLewisCreativeFrontEndStack/Prod/WebService/CheckBootstrapVersion",
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.CfnRule",
                       "version": "2.87.0"
                     }
                   }
                 },
                 "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_route53.RecordSet",
-                  "version": "2.87.0"
-                }
-              },
-              "wwwRecord": {
-                "id": "wwwRecord",
-                "path": "JestonLewisCreativeFrontEndStack/Hosting/wwwRecord",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "JestonLewisCreativeFrontEndStack/Hosting/wwwRecord/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::Route53::RecordSet",
-                      "aws:cdk:cloudformation:props": {
-                        "name": "www.jestonlewiscreative.com.",
-                        "type": "A",
-                        "aliasTarget": {
-                          "hostedZoneId": {
-                            "Fn::FindInMap": [
-                              "AWSCloudFrontPartitionHostedZoneIdMap",
-                              {
-                                "Ref": "AWS::Partition"
-                              },
-                              "zoneId"
-                            ]
-                          },
-                          "dnsName": {
-                            "Fn::GetAtt": [
-                              "HostingBucketswwwDistro110A0869",
-                              "DomainName"
-                            ]
-                          }
-                        },
-                        "hostedZoneId": {
-                          "Ref": "HostingHostedZoneBE37AE35"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_route53.CfnRecordSet",
-                      "version": "2.87.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_route53.RecordSet",
+                  "fqn": "aws-cdk-lib.Stack",
                   "version": "2.87.0"
                 }
               }
             },
             "constructInfo": {
-              "fqn": "constructs.Construct",
-              "version": "10.2.69"
-            }
-          },
-          "AWSCloudFrontPartitionHostedZoneIdMap": {
-            "id": "AWSCloudFrontPartitionHostedZoneIdMap",
-            "path": "JestonLewisCreativeFrontEndStack/AWSCloudFrontPartitionHostedZoneIdMap",
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.CfnMapping",
+              "fqn": "aws-cdk-lib.Stage",
               "version": "2.87.0"
             }
           },

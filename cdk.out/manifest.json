@@ -1,6 +1,13 @@
 {
   "version": "32.0.0",
   "artifacts": {
+    "assembly-JestonLewisCreativeFrontEndStack-Prod": {
+      "type": "cdk:cloud-assembly",
+      "properties": {
+        "directoryName": "assembly-JestonLewisCreativeFrontEndStack-Prod",
+        "displayName": "JestonLewisCreativeFrontEndStack/Prod"
+      }
+    },
     "JestonLewisCreativeFrontEndStack.assets": {
       "type": "cdk:asset-manifest",
       "properties": {
@@ -17,7 +24,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-deploy-role-706391136734-us-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-cfn-exec-role-706391136734-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-706391136734-us-west-2/401582615209bb3d06dfc18ba8516d09ef561b85eac00b770447105f9d5e715a.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-706391136734-us-west-2/875b43e793500c6b9a0cee469959da479364ded29b2d1ea94234cd4b084b3f99.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -33,64 +40,88 @@
         "JestonLewisCreativeFrontEndStack.assets"
       ],
       "metadata": {
-        "/JestonLewisCreativeFrontEndStack/Hosting/HostedZone/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/ArtifactsBucket/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingHostedZoneBE37AE35"
+            "data": "PipelineArtifactsBucketAEA9A052"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainBucket/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/ArtifactsBucket/Policy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingBucketsMainBucket04C1DE6F"
+            "data": "PipelineArtifactsBucketPolicyF53CCC52"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainBucket/Policy/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingBucketsMainBucketPolicy82BF4899"
+            "data": "PipelineRoleB27FAA37"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/Buckets/wwwBucket/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Role/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingBucketswwwBucket911E0031"
+            "data": "PipelineRoleDefaultPolicy7BDC1ABB"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/Buckets/MainDistro/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingBucketsMainDistro1726F27C"
+            "data": "Pipeline9850B417"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/Buckets/wwwDistro/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Source/jestoncolelewis_jestonlewiscreative.com/WebhookResource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingBucketswwwDistro110A0869"
+            "data": "PipelineSourcejestoncolelewisjestonlewiscreativecomWebhookResourceCDB28D0A"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/Buckets/Certificate/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingBucketsCertificateD555BBB6"
+            "data": "PipelineBuildSynthCdkBuildProjectRole231EEA2A"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/MainRecord/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Role/DefaultPolicy/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingMainRecordA388058E"
+            "data": "PipelineBuildSynthCdkBuildProjectRoleDefaultPolicyFB6C941C"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/Hosting/wwwRecord/Resource": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Pipeline/Build/Synth/CdkBuildProject/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "HostingwwwRecord7CD42007"
+            "data": "PipelineBuildSynthCdkBuildProject6BEFA8E6"
           }
         ],
-        "/JestonLewisCreativeFrontEndStack/AWSCloudFrontPartitionHostedZoneIdMap": [
+        "/JestonLewisCreativeFrontEndStack/Pipeline/CodeBuildActionRole/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+            "data": "PipelineCodeBuildActionRole226DB0CB"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Pipeline/CodeBuildActionRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineCodeBuildActionRoleDefaultPolicy1D62A6FE"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineUpdatePipelineSelfMutationRole57E559E8"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineUpdatePipelineSelfMutationRoleDefaultPolicyA225DA4E"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Pipeline/UpdatePipeline/SelfMutation/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineUpdatePipelineSelfMutationDAA41400"
           }
         ],
         "/JestonLewisCreativeFrontEndStack/CDKMetadata/Default": [
