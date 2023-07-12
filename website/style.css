@@ -39,7 +39,9 @@ body {
   
   /* Specific Sections */
   
-  
+  #apps {
+    display: flex;
+  }
   
   /* Text */
   
