@@ -91,3 +91,16 @@ p {
 
 
 /* Form */
+
+#support-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#support-form p {
+  margin: 0;
+}
+
+input, textarea {
+  margin: 5px 0px;
+}
