@@ -1,85 +1,92 @@
 /* General Sections */
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    color: #000816;
-    font-family: "Roboto", sans-serif;
-    background-color: #e9e9ee;
-    margin: 20px;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  header {
-    margin: 0 auto;
-    text-align: center;
-  }
-  
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-  
-  }
-  
-  footer {
-    margin: 0 auto;
-    margin-top: 50px;
-  }
-  
-  footer p {
-    text-align: center;
-  }
-  
-  footer a {
-    color: #000816;
-    font-size: 18px;
-    padding: 10px;
-    font-family: "Roboto", sans-serif;
-  }
-  
-  /* Specific Sections */
-  
-  #apps {
-    display: flex;
-  }
-  
-  /* Text */
-  
-  h1 {
-    font-size: 72px;
-    margin-bottom: 0;
-  }
-  
-  h2 {
-    font-size: 24px;
-    margin-bottom: 0;
-  }
-  
-  h3 {
-    font-size: 24px;
-    margin-bottom: 0;
-  }
-  
-  h4 {
-    font-size: 22px;
-    margin-bottom: 5px;
-  }
-  
-  ul {
-    margin-bottom: 25px;
-  }
-  
-  li {
-    font-size: 20px;
-    margin-bottom: 0;
-  }
-  
-  p {
-    font-size: 16px;
-    margin-top: 8px;
-  }
-  
-  /* Special */
-  
-  
-  /* Form */
+  color: #000816;
+  font-family: "Roboto", sans-serif;
+  background-color: #e9e9ee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+header {
+  margin: 0 auto;
+  text-align: center;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+footer {
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  justify-self: flex-end;
+}
+
+footer p {
+  text-align: center;
+}
+
+footer a {
+  color: #000816;
+  font-size: 18px;
+  padding: 10px;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Specific Sections */
+
+#apps {
+  display: flex;
+}
+
+/* Text */
+
+h1 {
+  font-size: 72px;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+h3 {
+  font-size: 24px;
+  margin-bottom: 0;
+}
+
+h4 {
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+
+ul {
+  margin-bottom: 25px;
+}
+
+li {
+  font-size: 20px;
+  margin-bottom: 0;
+}
+
+p {
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+/* Special */
+
+
+/* Form */
