@@ -48,6 +48,7 @@ footer a {
 
 #apps {
   display: flex;
+  justify-content: space-around;
 }
 
 /* Text */
