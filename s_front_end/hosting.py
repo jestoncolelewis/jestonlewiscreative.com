@@ -1,7 +1,8 @@
 from constructs import Construct
 from aws_cdk import (
     aws_route53 as r53,
-    aws_route53_targets as targets
+    aws_route53_targets as targets,
+    aws_ses as ses
 )
 from s_front_end.buckets import Buckets, name
 
@@ -35,6 +36,12 @@ class Hosting(Construct):
             target=r53.RecordTarget.from_alias(targets.CloudFrontTarget(bucket._www_distro)),
             zone=hosted_zone,
             record_name='www.' + name
+        )
+
+        identity = ses.EmailIdentity(
+            self, "Identity",
+            identity=ses.Identity.public_hosted_zone(hosted_zone),
+            mail_from_domain="mail." + name
         )
 
         self._zone = hosted_zone
