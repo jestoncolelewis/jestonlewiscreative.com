@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <script src="./script.js"></script>
     <title>Support | Jeston Lewis Creative</title>
 </head>
 
@@ -18,12 +19,14 @@
     <main>
         <form id="support-form" action="" method="post">
             <p>Name</p>
-            <input type="text" name="name" id="1">
+            <input type="text" name="name" id="0" placeholder="Name">
+            <p>Subject</p>
+            <input type="text" name="subject" id="1" placeholder="Subject">
             <p>Email</p>
-            <input type="email" name="email" id="2">
+            <input type="email" name="email" id="2" placeholder="my@email.com">
             <p>Issue</p>
-            <textarea name="" id="" cols="30" rows="10"></textarea>
-            <input type="submit" value="Send">
+            <textarea name="message" id="usrmessage" cols="30" rows="10"></textarea>
+            <button type="button" id="5" onclick="retrieve('support-form')">Submit</button>
         </form>
     </main>
     <footer>
