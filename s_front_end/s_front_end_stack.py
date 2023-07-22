@@ -3,7 +3,7 @@ from aws_cdk import (
     Stack
 )
 from .hosting import Hosting
-from .buckets import Buckets
+from .form import Form
 
 class SFrontEndStack(Stack):
 
@@ -13,3 +13,4 @@ class SFrontEndStack(Stack):
         # buckets = Buckets(self, "Buckets")
 
         hosting = Hosting(self, "Hosting")
+        form = Form(self, "Form")
