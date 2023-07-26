@@ -1,7 +1,20 @@
 {
   "version": "32.0.0",
   "files": {
-    "b70c94fb10841972379438c86e3c8d50030fe3a0284ec82ead4262b63a4a6385": {
+    "9de363d7e2d2a3bcfab3f039145c0ee766f28617cd571c34d7df6aa6054728a5": {
+      "source": {
+        "path": "../asset.9de363d7e2d2a3bcfab3f039145c0ee766f28617cd571c34d7df6aa6054728a5",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "9de363d7e2d2a3bcfab3f039145c0ee766f28617cd571c34d7df6aa6054728a5.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "3dea888a109fa2644d4219164ee20d83e72f296ed0eff07a892ed43fc8dd034d": {
       "source": {
         "path": "JestonLewisCreativeFrontEndStackProdWebServiceA0672800.template.json",
         "packaging": "file"
@@ -9,7 +22,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "b70c94fb10841972379438c86e3c8d50030fe3a0284ec82ead4262b63a4a6385.json",
+          "objectKey": "3dea888a109fa2644d4219164ee20d83e72f296ed0eff07a892ed43fc8dd034d.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

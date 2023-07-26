@@ -24,7 +24,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-deploy-role-706391136734-us-west-2",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::706391136734:role/cdk-hnb659fds-cfn-exec-role-706391136734-us-west-2",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-706391136734-us-west-2/875b43e793500c6b9a0cee469959da479364ded29b2d1ea94234cd4b084b3f99.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-706391136734-us-west-2/c10ebcfa3ebd63738459efc4fda722caecdc440b1b043843c7167c019eda792a.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -122,6 +122,24 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "PipelineUpdatePipelineSelfMutationDAA41400"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Assets/FileRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineAssetsFileRole59943A77"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Assets/FileRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineAssetsFileRoleDefaultPolicy14DB8755"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Pipeline/Assets/FileAsset1/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "PipelineAssetsFileAsset185A67CB4"
           }
         ],
         "/JestonLewisCreativeFrontEndStack/CDKMetadata/Default": [

@@ -17,7 +17,7 @@
         "validateOnSynth": true,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/b70c94fb10841972379438c86e3c8d50030fe3a0284ec82ead4262b63a4a6385.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/3dea888a109fa2644d4219164ee20d83e72f296ed0eff07a892ed43fc8dd034d.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -88,10 +88,136 @@
             "data": "HostingwwwRecord7CD42007"
           }
         ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Identity/DkimDnsToken1": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingIdentityDkimDnsToken15B19F675"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Identity/DkimDnsToken2": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingIdentityDkimDnsToken216BF9EAC"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Identity/DkimDnsToken3": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingIdentityDkimDnsToken30BDE73FF"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Identity/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingIdentityC02725A4"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Identity/MailFromMxRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingIdentityMailFromMxRecord1EAE23D2"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Hosting/Identity/MailFromTxtRecord/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "HostingIdentityMailFromTxtRecordD1B2C67B"
+          }
+        ],
         "/JestonLewisCreativeFrontEndStack/Prod/WebService/AWSCloudFrontPartitionHostedZoneIdMap": [
           {
             "type": "aws:cdk:logicalId",
             "data": "AWSCloudFrontPartitionHostedZoneIdMap"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/Form/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormServiceRole70BEFBAB"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/Form/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Form4DC9A4FF"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGateway4D29C263"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayDeployment66865E61886cf4d97b48535396ab51b68f153bed"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayDeploymentStageprod0580B76F"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayEndpoint10EDA56E"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayOPTIONS0E6478EB"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/{proxy+}/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayproxy39D407FF"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/{proxy+}/OPTIONS/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayproxyOPTIONS1A98D629"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/{proxy+}/ANY/ApiPermission.JestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACD.ANY..{proxy+}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayproxyANYApiPermissionJestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACDANYproxy751B9E42"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/{proxy+}/ANY/ApiPermission.Test.JestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACD.ANY..{proxy+}": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayproxyANYApiPermissionTestJestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACDANYproxyDA950081"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/{proxy+}/ANY/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayproxyANY1780967B"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/ANY/ApiPermission.JestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACD.ANY..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayANYApiPermissionJestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACDANY9E82D0A3"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/ANY/ApiPermission.Test.JestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACD.ANY..": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayANYApiPermissionTestJestonLewisCreativeFrontEndStackProdWebServiceFormLambdaGateway884F1ACDANYA640155A"
+          }
+        ],
+        "/JestonLewisCreativeFrontEndStack/Prod/WebService/Form/LambdaGateway/Default/ANY/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "FormLambdaGatewayANY9ADF9243"
           }
         ],
         "/JestonLewisCreativeFrontEndStack/Prod/WebService/CDKMetadata/Default": [
