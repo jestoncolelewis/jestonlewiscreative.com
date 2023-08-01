@@ -14,7 +14,7 @@ function retrieve(id) {
     }
 
     fetch(
-        "https://o8kdvuahw4.execute-api.us-west-2.amazonaws.com/emailTest",
+        "https://si157tdxnj.execute-api.us-west-2.amazonaws.com/prod",
         {method: 'POST',
         header: {
             'Content-Type': 'applications/json'
