@@ -6,7 +6,7 @@ ses = boto3.client("sesv2")
 def handler(event, context):
     body = event["body"]
     print(body)
-    body = json.loads(body)
+    body = json.loads("{}".format(body))
     replyto = body["email"]
     subject = body["subject"]
     message = "Name: " + body["name"] + "\n" + "Message: " + body["message"]
