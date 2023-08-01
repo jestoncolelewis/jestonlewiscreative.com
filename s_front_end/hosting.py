@@ -2,7 +2,8 @@ from constructs import Construct
 from aws_cdk import (
     aws_route53 as r53,
     aws_route53_targets as targets,
-    aws_ses as ses
+    aws_ses as ses,
+    RemovalPolicy
 )
 from s_front_end.buckets import Buckets, name
 
@@ -43,5 +44,7 @@ class Hosting(Construct):
             identity=ses.Identity.public_hosted_zone(hosted_zone),
             mail_from_domain="mail." + name
         )
+
+        hosted_zone.apply_removal_policy(RemovalPolicy.RETAIN)
 
         self._zone = hosted_zone
