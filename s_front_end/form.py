@@ -17,9 +17,9 @@ class Form(Construct):
 
         gateway = api.LambdaRestApi(
             self, "LambdaGateway",
-            handler=form,
-            default_cors_preflight_options=api.CorsOptions(
-                allow_methods=api.Cors.ALL_METHODS,
-                allow_origins=api.Cors.ALL_ORIGINS
-            )
+            handler=form
         )
+        prod = gateway.root.add_resource("prod")
+        prod.add_method("GET")
+        prod.add_method("POST")
+        prod.add_method("HEAD")
