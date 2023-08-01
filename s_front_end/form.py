@@ -15,6 +15,8 @@ class Form(Construct):
             handler="form_submit.handler"
         )
 
+        # TODO add permissions for lambda to send emails 
+
         gateway = api.LambdaRestApi(
             self, "LambdaGateway",
             handler=form
