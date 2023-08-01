@@ -37,8 +37,7 @@ class Buckets(Construct):
             website_index_document='index.html',
             website_error_document='404error.html',
             bucket_name=name,
-            block_public_access=s3.BlockPublicAccess(block_public_acls=False),
-            removal_policy=RemovalPolicy.DESTROY
+            block_public_access=s3.BlockPublicAccess(block_public_acls=False)
         )
 
         policy = iam.PolicyStatement(
@@ -52,8 +51,7 @@ class Buckets(Construct):
         self._www_bucket = s3.Bucket(
             self, 'wwwBucket',
             website_redirect=s3.RedirectTarget(host_name=name),
-            bucket_name='www.' + name,
-            removal_policy=RemovalPolicy.DESTROY
+            bucket_name='www.' + name
         )
 
         # Distribution
@@ -77,4 +75,4 @@ class Buckets(Construct):
             domain_name='*.' + name
         )
 
-        cert.apply_removal_policy(RemovalPolicy.DESTROY)
+        cert.apply_removal_policy(RemovalPolicy.RETAIN)
