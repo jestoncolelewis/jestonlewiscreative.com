@@ -18,10 +18,13 @@ class Form(Construct):
         # TODO add permissions for lambda to send emails 
 
         gateway = api.LambdaRestApi(
-            self, "LambdaGateway",
-            handler=form
+            self, "JLCFormLambdaGateway",
+            handler=form,
+            default_cors_preflight_options=api.CorsOptions(
+                allow_origins=api.Cors.ALL_ORIGINS,
+                allow_credentials=True
+            )
         )
-        prod = gateway.root.add_resource("prod")
-        prod.add_method("GET")
-        prod.add_method("POST")
-        prod.add_method("HEAD")
+        gateway.root.add_method("GET")
+        gateway.root.add_method("POST")
+        gateway.root.add_method("HEAD")
