@@ -26,6 +26,7 @@ function send(id) {
         alert('Successfully submitted, we\'ll be in touch!');
     })
     .catch((error) => {
+        console.log(error);
         alert('Please try again.');
     })
 }

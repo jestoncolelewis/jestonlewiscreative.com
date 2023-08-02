@@ -15,16 +15,21 @@ class Form(Construct):
             handler="form_submit.handler"
         )
 
+        options = lamb.Function(
+            self, "Options",
+            runtime=lamb.Runtime.PYTHON_3_9,
+            code=lamb.Code.from_asset("lambda"),
+            handler="options_return.handler"
+        )
+
         # TODO add permissions for lambda to send emails 
 
         gateway = api.LambdaRestApi(
             self, "JLCFormLambdaGateway",
             handler=form,
-            default_cors_preflight_options=api.CorsOptions(
-                allow_origins=api.Cors.ALL_ORIGINS,
-                allow_credentials=True
-            )
+            proxy=True
         )
         gateway.root.add_method("GET")
         gateway.root.add_method("POST")
         gateway.root.add_method("HEAD")
+        gateway.root.add_method("OPTIONS", api.LambdaIntegration(options))
