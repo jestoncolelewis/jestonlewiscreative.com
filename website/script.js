@@ -1,4 +1,4 @@
-function retrieve(id) {
+function send(id) {
     const form = document.getElementById(id)
     const input = form.getElementsByTagName("input")
     let usrname = input[0].value
@@ -14,7 +14,7 @@ function retrieve(id) {
     }
 
     fetch(
-        "https://si157tdxnj.execute-api.us-west-2.amazonaws.com/prod",
+        "https://bleihaum8g.execute-api.us-west-2.amazonaws.com/prod/",
         {method: 'POST',
         header: {
             'Content-Type': 'applications/json'
