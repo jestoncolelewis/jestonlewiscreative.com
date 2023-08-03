@@ -66,7 +66,8 @@ class Buckets(Construct):
         # Certificate
         cert = cm.Certificate(
             self, 'Certificate',
-            domain_name='*.' + name
+            domain_name=name,
+            subject_alternative_names=["www." + name]
         )
         # cert.apply_removal_policy(RemovalPolicy.RETAIN)
 
