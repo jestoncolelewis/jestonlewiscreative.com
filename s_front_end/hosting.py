@@ -16,8 +16,9 @@ class Hosting(Construct):
             return self._zone
 
         # Hosting
-        hosted_zone = r53.HostedZone(
+        hosted_zone = r53.HostedZone.from_hosted_zone_attributes(
             self, 'HostedZone',
+            hosted_zone_id="Z02591293JOU7GDHXDA3Y",
             zone_name=name
         )
 
@@ -45,6 +46,6 @@ class Hosting(Construct):
             mail_from_domain="mail." + name
         )
 
-        hosted_zone.apply_removal_policy(RemovalPolicy.RETAIN)
+        # hosted_zone.apply_removal_policy(RemovalPolicy.RETAIN)
 
         self._zone = hosted_zone
