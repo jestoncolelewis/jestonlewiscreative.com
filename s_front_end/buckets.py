@@ -75,7 +75,8 @@ class Buckets(Construct):
         self._main_distro = cf.Distribution(
             self, 'MainDistro',
             default_behavior=cf.BehaviorOptions(
-                origin=origins.S3Origin(self._main_bucket)
+                origin=origins.S3Origin(self._main_bucket),
+                viewer_protocol_policy=cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
             certificate=cert,
             domain_names=[name],
@@ -85,7 +86,8 @@ class Buckets(Construct):
         self._www_distro = cf.Distribution(
             self, 'wwwDistro',
             default_behavior=cf.BehaviorOptions(
-                origin=origins.S3Origin(self._www_bucket)
+                origin=origins.S3Origin(self._www_bucket),
+                viewer_protocol_policy=cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS
             ),
             certificate=cert,
             domain_names=["www." + name],
