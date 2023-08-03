@@ -69,7 +69,7 @@ class Buckets(Construct):
             domain_name=name,
             subject_alternative_names=["www." + name]
         )
-        # cert.apply_removal_policy(RemovalPolicy.RETAIN)
+        cert.apply_removal_policy(RemovalPolicy.RETAIN)
 
         # Distribution
         self._main_distro = cf.Distribution(
