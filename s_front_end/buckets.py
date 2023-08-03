@@ -23,6 +23,10 @@ class Buckets(Construct):
             return self._www_bucket
         
         @property
+        def log_bucket(self):
+            return self._log_bucket
+        
+        @property
         def main_distro(self):
             return self._main_distro
         
@@ -39,34 +43,24 @@ class Buckets(Construct):
             bucket_name=name,
             block_public_access=s3.BlockPublicAccess(block_public_acls=False)
         )
-
-        policy = iam.PolicyStatement(
-            actions=["s3:GetObject"],
+        self._main_bucket.add_to_resource_policy(iam.PolicyStatement(
             sid="PublicReadGetObject",
-            )
-        policy.add_any_principal()
-        policy.add_resources('arn:aws:s3:::{}/*'.format(name))
-        self._main_bucket.add_to_resource_policy(permission=policy)
+            effect=iam.Effect.ALLOW,
+            principals=[iam.StarPrincipal()],
+            actions=["s3:GetObject"],
+            resources=["arn:aws:s3:::{}/*".format(name)]
+            ))
 
         self._www_bucket = s3.Bucket(
             self, 'wwwBucket',
             website_redirect=s3.RedirectTarget(host_name=name),
             bucket_name='www.' + name
         )
-
-        # Distribution
-        self._main_distro = cf.Distribution(
-            self, 'MainDistro',
-            default_behavior=cf.BehaviorOptions(
-                origin=origins.S3Origin(self._main_bucket)
-            )
-        )
-
-        self._www_distro = cf.Distribution(
-            self, 'wwwDistro',
-            default_behavior=cf.BehaviorOptions(
-                origin=origins.S3Origin(self._www_bucket)
-            )
+        
+        self._log_bucket = s3.Bucket(
+            self, "logBucket",
+            bucket_name= "logs." + name,
+            object_ownership=s3.ObjectOwnership.BUCKET_OWNER_PREFERRED
         )
 
         # Certificate
@@ -74,5 +68,25 @@ class Buckets(Construct):
             self, 'Certificate',
             domain_name='*.' + name
         )
+        # cert.apply_removal_policy(RemovalPolicy.RETAIN)
 
-        cert.apply_removal_policy(RemovalPolicy.RETAIN)
+        # Distribution
+        self._main_distro = cf.Distribution(
+            self, 'MainDistro',
+            default_behavior=cf.BehaviorOptions(
+                origin=origins.S3Origin(self._main_bucket)
+            ),
+            certificate=cert,
+            domain_names=[name],
+            log_bucket=self._log_bucket
+        )
+
+        self._www_distro = cf.Distribution(
+            self, 'wwwDistro',
+            default_behavior=cf.BehaviorOptions(
+                origin=origins.S3Origin(self._www_bucket)
+            ),
+            certificate=cert,
+            domain_names=["www." + name],
+            log_bucket=self._log_bucket
+        )
