@@ -22,11 +22,4 @@ function send(id) {
         body: JSON.stringify(data),
     })
     .then((response) => response.json())
-    .then((data) => {
-        alert('Successfully submitted, we\'ll be in touch!');
-    })
-    .catch((error) => {
-        console.log(error);
-        alert('Please try again.');
-    })
-}
+};
