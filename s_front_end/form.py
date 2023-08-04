@@ -20,7 +20,7 @@ class Form(Construct):
             actions=[
                 "ses:*"
             ],
-            resources=["arn:aws:ses:us-west-2:706391136734:identity/jestonlewiscreative.com"] # TODO add arn dynamically check 
+            resources=["arn:aws:ses:us-east-1:706391136734:identity/jestonlewiscreative.com"] # TODO add arn dynamically check 
         ))
 
         options = lamb.Function(
