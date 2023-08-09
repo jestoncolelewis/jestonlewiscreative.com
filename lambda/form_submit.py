@@ -22,7 +22,7 @@ def handler(event, context):
     )
     
     responseBody = {}
-    responseBody["date"] = email["ResponseMetadata"]["HTTPHeaders"]
+    responseBody["date"] = email["ResponseMetadata"]["HTTPHeaders"]["date"]
     responseBody["id"] = email["MessageId"]
     responseBody["message"] = "Thank you for your email!"
     responseObject = {}
