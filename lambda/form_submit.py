@@ -5,12 +5,11 @@ ses = boto3.client("sesv2")
 
 def handler(event, context):
     body = event["body"]
-    print(body)
     body = json.loads("{}".format(body))
     replyto = body["email"]
     subject = body["subject"]
     message = "Name: " + body["name"] + "\n" + "Message: " + body["message"]
-    response = ses.send_email(
+    email = ses.send_email(
         FromEmailAddress = "web@jestonlewiscreative.com",
         Destination = {"ToAddresses": ["info@jestonlewiscreative.com"]},
         ReplyToAddresses = [replyto],
@@ -21,5 +20,15 @@ def handler(event, context):
             }
         }
     )
-    return response
+    
+    responseBody = {}
+    responseBody["date"] = email["ResponseMetadata"]["HTTPHeaders"]
+    responseBody["id"] = email["MessageId"]
+    responseBody["message"] = "Thank you for your email!"
+    responseObject = {}
+    responseObject["statusCode"] = 200
+    responseObject["headers"] = {}
+    responseObject["headers"]["Content-Type"] = "applications/json"
+    responseObject["body"] = json.dumps(responseBody)
+    return responseObject
     
