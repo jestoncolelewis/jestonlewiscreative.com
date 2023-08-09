@@ -14,7 +14,7 @@ function send(id) {
     }
 
     fetch(
-        "https://maoq8alv0l.execute-api.us-east-1.amazonaws.com/prod/",
+        "https://maoq8alv0l.execute-api.us-east-1.amazonaws.com/prod/functions",
         {method: 'POST',
         header: {
             'Content-Type': 'applications/json'
