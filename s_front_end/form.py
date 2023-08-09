@@ -36,7 +36,8 @@ class Form(Construct):
             handler=form,
             proxy=True
         )
-        gateway.root.add_method("GET")
-        gateway.root.add_method("POST")
-        gateway.root.add_method("HEAD")
-        gateway.root.add_method("OPTIONS", api.LambdaIntegration(options))
+        functions = gateway.root.add_resource("functions")
+        functions.add_method("GET")
+        functions.add_method("POST", api.LambdaIntegration(form))
+        functions.add_method("HEAD")
+        functions.add_method("OPTIONS", api.LambdaIntegration(options))
